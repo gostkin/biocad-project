@@ -1,6 +1,41 @@
 cmake_minimum_required(VERSION 3.13)
-project(biocad_project)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(biocad_project main.cpp)
+
+if(NOT WIN32)
+    execute_process(COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/init-submodules.sh WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}" RESULT_VARIABLE INIT_SUBMODULES_RC)
+    if(NOT(INIT_SUBMODULES_RC EQUAL 0))
+        message(FATAL_ERROR "Submodules initialization failed with exit code ${INIT_SUBMODULES_RC}, check the output and try to run ./init-submodules.sh manually. CMake will exit.")
+    endif()
+endif()
+
+include(CMakeLists-files.cmake)
+
+project(biocad_project)
+set(EXECUTABLE_NAME "biocad_project")
+
+
+add_library(AppLib STATIC ${APPLIB_SOURCE_FILES})
+set_target_properties(AppLib PROPERTIES LINKER_LANGUAGE CXX)
+
+add_executable(App ${APP_TYPE} ${APP_SOURCE_FILES} ${GLOBAL_HOTKEY_FILES})
+set_target_properties(App PROPERTIES OUTPUT_NAME ${EXECUTABLE_NAME})
+
+target_link_libraries(App AppLib)
+
+find_package(Threads REQUIRED)
+
+
+add_library(GoogleTestLib STATIC ${GOOGLETESTLIB_SOURCE_FILES})
+target_link_libraries(GoogleTestLib AppLib)
+
+add_executable(Tests ${APP_TESTS_TYPE} ${TESTS_SOURCE_FILES})
+
+target_link_libraries(Tests GoogleTestLib)
+target_link_libraries(Tests Threads::Threads)
+target_link_libraries(Tests Threads::Threads)
+
+enable_testing()
+
+configure_include_dirs()
