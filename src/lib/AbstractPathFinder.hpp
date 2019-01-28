@@ -5,6 +5,8 @@
 #ifndef BIOCAD_PROJECT_ABSTRACTPATHFINDER_HPP
 #define BIOCAD_PROJECT_ABSTRACTPATHFINDER_HPP
 
+#include "StdAfx.hpp"
+
 class Graph;
 
 class AbstractPathFinder {

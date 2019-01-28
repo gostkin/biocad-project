@@ -10,7 +10,10 @@ if(NOT WIN32)
     endif()
 endif()
 
-include(CMakeLists-files.cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/deps/cotire/CMake)
+include(cotire)
+
+include(CMakeListsFiles.cmake)
 
 project(biocad_project)
 set(EXECUTABLE_NAME "biocad_project")
@@ -39,3 +42,16 @@ target_link_libraries(Tests Threads::Threads)
 enable_testing()
 
 configure_include_dirs()
+
+if(__COTIRE_INCLUDED)
+    set_target_properties(AppLib PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
+    set_target_properties(AppLib PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/lib/StdAfx.hpp")
+
+    set_target_properties(App PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
+    set_target_properties(App PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/main/StdAfxMain.hpp")
+
+    set_target_properties(Tests PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
+    set_target_properties(Tests PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/test/StdAfxTest.hpp")
+
+    cotire(AppLib App Tests)
+endif()

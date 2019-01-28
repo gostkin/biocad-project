@@ -5,4 +5,6 @@
 #ifndef BIOCAD_PROJECT_GRAPH_HPP
 #define BIOCAD_PROJECT_GRAPH_HPP
 
+#include "StdAfx.hpp"
+
 #endif //BIOCAD_PROJECT_GRAPH_HPP

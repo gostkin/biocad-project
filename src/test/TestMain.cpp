@@ -2,7 +2,7 @@
 // Created by gostkin on 28.01.19.
 //
 
-#include <gtest/gtest.h>
+#include "StdAfxTest.hpp"
 
 int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);
